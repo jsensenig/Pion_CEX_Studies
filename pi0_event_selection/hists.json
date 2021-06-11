@@ -1,0 +1,402 @@
+{
+  "1d_hists": [
+    {
+      "name" : "hPi0Ke",
+      "type": "TH1D",
+      "axes": "Daughter #pi0 Kinetic Energy;KE [MeV];Count",
+      "bins": 40,
+      "u_lim": 800.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hPi0E",
+      "type": "TH1D",
+      "axes": "Daughter #pi0 Energy;E [MeV];Count",
+      "bins": 60,
+      "u_lim": 1200.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hLeadGammaP",
+      "type": "TH1D",
+      "axes": "Leading #pi0 Decay Gamma Energy;E [MeV];Count",
+      "bins": 50,
+      "u_lim": 1000.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hSubLeadGammaP",
+      "type": "TH1D",
+      "axes": "Sub-leading #pi0 Decay Gamma Energy;E [MeV];Count",
+      "bins": 50,
+      "u_lim": 1000.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hGammaOpenAngle",
+      "type": "TH1D",
+      "axes": "Opening Angle Between Gammas;#theta [rad];Count",
+      "bins": 32,
+      "u_lim": 3.2,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hRootPi0PError",
+      "type": "TH1D",
+      "axes": "#pi0 Momentum True/Root;True/Root;Count",
+      "bins": 50,
+      "u_lim": 1.5,
+      "l_lim": 0.5
+    },
+    {
+      "name" : "hPolyPi0PError",
+      "type": "TH1D",
+      "axes": "#pi0 Momentum True/Polynomial Fit;True/Polynomial;Count",
+      "bins": 20,
+      "u_lim": 5.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hGammaDiff",
+      "type": "TH1D",
+      "axes": "Difference of #theta_1 - #theta_2;#theta_1 - #theta_2;Count",
+      "bins": 60,
+      "u_lim": 1.5,
+      "l_lim": -1.5
+    },
+    {
+      "name" : "hPi0CalcAngleDiff",
+      "type": "TH1D",
+      "axes": "Difference Calc - True Cos#theta;Calc-True Cos#theta;Count",
+      "bins": 80,
+      "u_lim": 1.0,
+      "l_lim": -1.0
+    },
+    {
+      "name" : "hShowerEnergyDiff",
+      "type": "TH1D",
+      "axes": "Difference True-Reco Gamma Energy;True-Reco E_#gamma [MeV];Count",
+      "bins": 60,
+      "u_lim": 500.0,
+      "l_lim": -100.0
+    },
+    {
+      "name" : "hShowerAngleTrueBeamDiff",
+      "type": "TH1D",
+      "axes": "Difference True-Reco Gamma Angle (True Beam Dir);True-Reco #theta_#gamma [deg];Count",
+      "bins": 40,
+      "u_lim": 90.0,
+      "l_lim": -90.0
+    },
+    {
+      "name" : "hShowerAngleRecoBeamDiff",
+      "type": "TH1D",
+      "axes": "Difference True-Reco Gamma Angle (Reco Beam Dir);True-Reco #theta_#gamma [deg];Count",
+      "bins": 40,
+      "u_lim": 90.0,
+      "l_lim": -90.0
+    },
+    {
+      "name" : "beam_avg_pida_p",
+      "type": "TH1D",
+      "axes": "Beam Proton <PIDA>; p <PIDA>;Count",
+      "bins": 40,
+      "u_lim": 20.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "beam_avg_pida_pi",
+      "type": "TH1D",
+      "axes": "Beam Pion <PIDA>; #pi <PIDA>;Count",
+      "bins": 40,
+      "u_lim": 20.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "beam_avg_pida_mu",
+      "type": "TH1D",
+      "axes": "Beam Muon <PIDA>; #mu <PIDA>;Count",
+      "bins": 40,
+      "u_lim": 20.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "beam_avg_pida_e",
+      "type": "TH1D",
+      "axes": "Beam Electron <PIDA>; e <PIDA>;Count",
+      "bins": 40,
+      "u_lim": 20.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "beam_avg_pida_other",
+      "type": "TH1D",
+      "axes": "Beam Other <PIDA>; Other <PIDA>;Count",
+      "bins": 40,
+      "u_lim": 20.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "daughter_avg_pida_p",
+      "type": "TH1D",
+      "axes": "Daughter Proton <PIDA>; p <PIDA>;Count",
+      "bins": 40,
+      "u_lim": 20.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "daughter_avg_pida_pi",
+      "type": "TH1D",
+      "axes": "Daughter Pion <PIDA>; #pi <PIDA>;Count",
+      "bins": 40,
+      "u_lim": 20.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "daughter_avg_pida_mu",
+      "type": "TH1D",
+      "axes": "Daughter Muon <PIDA>; #mu <PIDA>;Count",
+      "bins": 40,
+      "u_lim": 20.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "daughter_avg_pida_e",
+      "type": "TH1D",
+      "axes": "Daughter Electron <PIDA>; e <PIDA>;Count",
+      "bins": 40,
+      "u_lim": 20.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "daughter_avg_pida_other",
+      "type": "TH1D",
+      "axes": "Daughter Other <PIDA>; Other <PIDA>;Count",
+      "bins": 40,
+      "u_lim": 20.0,
+      "l_lim": 0.0
+    }
+  ],
+  "2d_hists": [
+    {
+      "name" : "hGammaP",
+      "type": "TH2D",
+      "axes": "#pi0 Decay Gamma Momentum;Leading P [MeV];Sub-Leading P [MeV]",
+      "xbins": 50,
+      "ybins": 25,
+      "xu_lim": 1000.0,
+      "xl_lim": 0.0,
+      "yu_lim": 500.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hPiPPi0P",
+      "type": "TH2D",
+      "axes": "#pi+ vs #pi0  Momentum;#pi+ P [MeV];#pi0 P [MeV]",
+      "xbins": 60,
+      "ybins": 60,
+      "xu_lim": 1200.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1200.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hPiP1Pi0P",
+      "type": "TH2D",
+      "axes": "#pi+ vs 1#pi0  Momentum;#pi+ P [MeV];#pi0 P [MeV]",
+      "xbins": 60,
+      "ybins": 60,
+      "xu_lim": 1200.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1200.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hPi0EGammaOpenAngle",
+      "type": "TH2D",
+      "axes": "Gamma Open Angle vs #pi0 Energy;#theta [rad];#pi0 E [MeV]",
+      "xbins": 36,
+      "ybins": 60,
+      "xu_lim": 180.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1200.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hGammaR",
+      "type": "TH2D",
+      "axes": "Gamma Vertex Gap #DeltaR;#gamma1 [cm];#gamma2 [cm]",
+      "xbins": 50,
+      "ybins": 50,
+      "xu_lim": 1.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hGammaLen",
+      "type": "TH2D",
+      "axes": "Gamma Length;#gamma1 [cm];#gamma2 [cm]",
+      "xbins": 50,
+      "ybins": 50,
+      "xu_lim": 100.0,
+      "xl_lim": 0.0,
+      "yu_lim": 100.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hGammaPi0Angle",
+      "type": "TH2D",
+      "axes": "#pi0 Gamma Angle;#gamma1 Angle [deg];#gamma2 Angle [deg]",
+      "xbins": 72,
+      "ybins": 72,
+      "xu_lim": 180.0,
+      "xl_lim": 0.0,
+      "yu_lim": 180.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hPi0TrueCalc",
+      "type": "TH2D",
+      "axes": "#pi0 Angle True vs Calc;Calc cos#theta;True cos#theta",
+      "xbins": 40,
+      "ybins": 40,
+      "xu_lim": 1.0,
+      "xl_lim": -1.0,
+      "yu_lim": 1.0,
+      "yl_lim": -1.0
+    },
+    {
+      "name" : "hPi0TrueCalcEnergy",
+      "type": "TH2D",
+      "axes": "#pi0 Energy True vs Calc;Calc Energy [MeV];True Energy [MeV]",
+      "xbins": 60,
+      "ybins": 60,
+      "xu_lim": 1200.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1200.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hTrueRecoGammaCount",
+      "type": "TH2I",
+      "axes": "True #pi0 vs Reco n#gamma;Reco n#gamma;True n#pi0",
+      "xbins": 8,
+      "ybins": 5,
+      "xu_lim": 8,
+      "xl_lim": 0,
+      "yu_lim": 5,
+      "yl_lim": 0
+    },
+    {
+      "name" : "hShowerGammaEnergy",
+      "type": "TH2D",
+      "axes": "True Gamma vs Reco Shower Energy;Reco Shower E [MeV];True E_#gamma [MeV]",
+      "xbins": 60,
+      "ybins": 60,
+      "xu_lim": 600.0,
+      "xl_lim": 0.0,
+      "yu_lim": 600.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hShowerEnergyDifffEnergy",
+      "type": "TH2D",
+      "axes": "True - Reco Shower Energy vs True Energy;True E [MeV];True-Reco E [MeV]",
+      "xbins": 80,
+      "ybins": 60,
+      "xu_lim": 800.0,
+      "xl_lim": 0.0,
+      "yu_lim": 500.0,
+      "yl_lim": -100.0
+    },
+    {
+      "name" : "hShowerEnergyDifffAngle",
+      "type": "TH2D",
+      "axes": "True - Reco Shower Energy vs True Angle;True Angle [deg];True-Reco E [MeV]",
+      "xbins": 40,
+      "ybins": 60,
+      "xu_lim": 180.0,
+      "xl_lim": 0.0,
+      "yu_lim": 500.0,
+      "yl_lim": -100.0
+    },
+    {
+      "name" : "hShowerAngleDifffEnergy",
+      "type": "TH2D",
+      "axes": "True - Reco Angle vs True Energy;True E [MeV];True-Reco #theta [deg]",
+      "xbins": 80,
+      "ybins": 40,
+      "xu_lim": 800.0,
+      "xl_lim": 0.0,
+      "yu_lim": 90.0,
+      "yl_lim": -90.0
+    },
+    {
+      "name" : "hShowerAngleDifffAngle",
+      "type": "TH2D",
+      "axes": "True - Reco Shower Angle vs True Angle;True Angle [rad];True-Reco #theta [deg]",
+      "xbins": 40,
+      "ybins": 40,
+      "xu_lim": 180.0,
+      "xl_lim": 0.0,
+      "yu_lim": 90.0,
+      "yl_lim": -90.0
+    },
+    {
+      "name" : "hpi0TrueRecoEnergy",
+      "type": "TH2D",
+      "axes": "True vs Reco Energy;Reco Energy [MeV];True Energy [MeV]",
+      "xbins": 60,
+      "ybins": 60,
+      "xu_lim": 1200.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1200.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hpi0TrueRecoTheta",
+      "type": "TH2D",
+      "axes": "True vs Reco Angle;Reco #theta [deg];True #theta [deg]",
+      "xbins": 60,
+      "ybins": 60,
+      "xu_lim": 90.0,
+      "xl_lim": -90.0,
+      "yu_lim": 90.0,
+      "yl_lim": -90.0
+    },
+    {
+      "name" : "fit_daughter_pid",
+      "type": "TH2I",
+      "axes": "Daughter Reco vs True PDG;True PDG;Reco PDG",
+      "xbins": 8,
+      "ybins": 2,
+      "xu_lim": 8,
+      "xl_lim": 0,
+      "yu_lim": 2,
+      "yl_lim": 0
+    },
+    {
+      "name" : "chi2_daughter_pid",
+      "type": "TH2I",
+      "axes": "Daughter Reco vs True PDG;True PDG;Reco PDG",
+      "xbins": 8,
+      "ybins": 2,
+      "xu_lim": 8,
+      "xl_lim": 0,
+      "yu_lim": 2,
+      "yl_lim": 0
+    },
+    {
+      "name" : "true_beam_pdg_michel_score",
+      "type": "TH2D",
+      "axes": "True-byHits Beam PDG vs Michel Score;Michel Score;True Beam PDG",
+      "xbins": 50,
+      "ybins": 10,
+      "xu_lim": 1,
+      "xl_lim": 0,
+      "yu_lim": 10,
+      "yl_lim": 0
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "PIDAAvg": {
+    "MinResRange": 0,
+    "MaxResRange": 30,
+    "MaxPIDAValue": 50,
+    "ExponentConstant": 0.42
+  }
+}

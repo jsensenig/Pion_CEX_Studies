@@ -1,0 +1,40 @@
+{
+  "beam_tof": {
+    "def": "Cuts to the beam particle ToF [ns] to select pions.",
+    "upper": 98.0,
+    "lower": 96.0
+  },
+  "beam_endz": {
+    "def": "Cut beam EndZ [cm]. Helps remove beam muons.",
+    "upper": 222.0,
+    "lower": 0.0
+  },
+  "pida": {
+    "def": "Avg PIDA score cut, used for PID",
+    "pion_upper": 5.0,
+    "pion_lower": 0.0,
+    "proton_upper": 26.0,
+    "proton_lower": 5.0,
+    "muon_upper": 26.0,
+    "muon_lower": 22.0,
+    "kaon_upper": 26.0,
+    "kaon_lower": 22.0
+  },
+  "cnn_trackshower": {
+    "def": "Cut CNN track/shower score. Classify daughters as track or shower",
+    "upper": 0.35,
+    "lower": 0.0
+  },
+  "deltaR": {
+    "def": "Cut (lower limit) to daughter tracks distance to vertex to help reject non-pi0 daughters",
+    "lower": 5.0
+  },
+  "daughter_nhits": {
+    "def": "Daughter nhits lower limit to help reject non-pi0 gammas",
+    "lower": 10
+  },
+  "michel_score": {
+  "def": "Michel score to help reject beam muons (Ajib's CNN method)",
+  "upper": 0.95
+  }
+}

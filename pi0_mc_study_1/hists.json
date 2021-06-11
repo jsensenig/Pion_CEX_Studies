@@ -1,0 +1,163 @@
+{
+  "1d_hists": [
+    {
+      "name" : "hPi0Ke",
+      "type": "TH1D",
+      "axes": "Daughter #pi0 Kinetic Energy;KE [MeV];Count",
+      "bins": 40,
+      "u_lim": 800.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hPiInElKe",
+      "type": "TH1D",
+      "axes": "All In-elastic Kinetic Energy; KE [MeV];Fraction",
+      "bins": 50,
+      "u_lim": 1000.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hFracCexKe",
+      "type": "TH1D",
+      "axes": "Fraction CEX Kinetic Energy; KE [MeV];Fraction",
+      "bins": 50,
+      "u_lim": 1000.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hPi0E",
+      "type": "TH1D",
+      "axes": "Daughter #pi0 Energy;E [MeV];Count",
+      "bins": 60,
+      "u_lim": 1200.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hLeadGammaP",
+      "type": "TH1D",
+      "axes": "Leading #pi0 Decay Gamma Energy;E [MeV];Count",
+      "bins": 50,
+      "u_lim": 1000.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hSubLeadGammaP",
+      "type": "TH1D",
+      "axes": "Sub-leading #pi0 Decay Gamma Energy;E [MeV];Count",
+      "bins": 50,
+      "u_lim": 1000.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hNpi0Cex",
+      "type": "TH1I",
+      "axes": "Number Pi0 in CEX Event;N#pi0;Count",
+      "bins": 5,
+      "u_lim": 5,
+      "l_lim": 0
+    },
+    {
+      "name" : "hGammaOpenAngle",
+      "type": "TH1D",
+      "axes": "Opening Angle Between Gammas;#theta [rad];Count",
+      "bins": 32,
+      "u_lim": 3.2,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hAbsNgamma",
+      "type": "TH1I",
+      "axes": "Number of Gammas in ABS Event;n#gamma;Count",
+      "bins": 15,
+      "u_lim": 15,
+      "l_lim": 0
+    },
+    {
+      "name" : "hAbsGammaP",
+      "type": "TH1D",
+      "axes": "Gamma in ABS Event Momentum;E [MeV];Count",
+      "bins": 50,
+      "u_lim": 50.0,
+      "l_lim": 0.0
+    }
+  ],
+  "2d_hists": [
+    {
+      "name" : "hGammaP",
+      "type": "TH2D",
+      "axes": "#pi0 Decay Gamma Momentum;Leading P [MeV];Sub-Leading P [MeV]",
+      "xbins": 50,
+      "ybins": 25,
+      "xu_lim": 1000.0,
+      "xl_lim": 0.0,
+      "yu_lim": 500.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hPiPPi0P",
+      "type": "TH2D",
+      "axes": "#pi+ vs #pi0  Momentum;#pi+ P [MeV];#pi0 P [MeV]",
+      "xbins": 60,
+      "ybins": 60,
+      "xu_lim": 1200.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1200.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hPiP1Pi0P",
+      "type": "TH2D",
+      "axes": "#pi+ vs 1#pi0  Momentum;#pi+ P [MeV];#pi0 P [MeV]",
+      "xbins": 60,
+      "ybins": 60,
+      "xu_lim": 1200.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1200.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hNucleonDaughters",
+      "type": "TH2I",
+      "axes": "Neutron vs Proton Daughters;nProton;nNeutron",
+      "xbins": 12,
+      "ybins": 12,
+      "xu_lim": 12,
+      "xl_lim": 0,
+      "yu_lim": 12,
+      "yl_lim": 0
+    },
+    {
+      "name" : "hPi0EGammaOpenAngle",
+      "type": "TH2D",
+      "axes": "Gamma Open Angle vs #pi0 Energy;#pi0 E [MeV];#theta [rad]",
+      "xbins": 60,
+      "ybins": 32,
+      "xu_lim": 1200.0,
+      "xl_lim": 0.0,
+      "yu_lim": 3.2,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hGammaR",
+      "type": "TH2D",
+      "axes": "Gamma Vertex Gap #DeltaR;#gamma1 [cm];#gamma2 [cm]",
+      "xbins": 50,
+      "ybins": 50,
+      "xu_lim": 1.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hGammaLen",
+      "type": "TH2D",
+      "axes": "Gamma Length;#gamma1 [cm];#gamma2 [cm]",
+      "xbins": 50,
+      "ybins": 50,
+      "xu_lim": 100.0,
+      "xl_lim": 0.0,
+      "yu_lim": 100.0,
+      "yl_lim": 0.0
+    }
+  ]
+}

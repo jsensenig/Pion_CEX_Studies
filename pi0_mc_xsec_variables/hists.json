@@ -1,0 +1,177 @@
+{
+  "1d_hists": [
+    {
+      "name" : "hPi0Ke",
+      "type": "TH1D",
+      "axes": "Daughter #pi0 Kinetic Energy;KE [MeV];Count",
+      "bins": 40,
+      "u_lim": 800.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hPi0E",
+      "type": "TH1D",
+      "axes": "Daughter #pi0 Energy;E [MeV];Count",
+      "bins": 60,
+      "u_lim": 1200.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hLeadGammaP",
+      "type": "TH1D",
+      "axes": "Leading #pi0 Decay Gamma Energy;E [MeV];Count",
+      "bins": 50,
+      "u_lim": 1000.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hSubLeadGammaP",
+      "type": "TH1D",
+      "axes": "Sub-leading #pi0 Decay Gamma Energy;E [MeV];Count",
+      "bins": 50,
+      "u_lim": 1000.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hGammaOpenAngle",
+      "type": "TH1D",
+      "axes": "Opening Angle Between Gammas;#theta [rad];Count",
+      "bins": 32,
+      "u_lim": 3.2,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hRootPi0PError",
+      "type": "TH1D",
+      "axes": "#pi0 Momentum True/Root;True/Root;Count",
+      "bins": 50,
+      "u_lim": 1.5,
+      "l_lim": 0.5
+    },
+    {
+      "name" : "hPolyPi0PError",
+      "type": "TH1D",
+      "axes": "#pi0 Momentum True/Polynomial Fit;True/Polynomial;Count",
+      "bins": 20,
+      "u_lim": 5.0,
+      "l_lim": 0.0
+    },
+    {
+      "name" : "hGammaDiff",
+      "type": "TH1D",
+      "axes": "Difference of #theta_1 - #theta_2;#theta_1 - #theta_2;Count",
+      "bins": 60,
+      "u_lim": 1.5,
+      "l_lim": -1.5
+    },
+    {
+      "name" : "hPi0CalcAngleDiff",
+      "type": "TH1D",
+      "axes": "Difference Calc - True Cos#theta;Calc-True Cos#theta;Count",
+      "bins": 80,
+      "u_lim": 1.0,
+      "l_lim": -1.0
+    }
+  ],
+  "2d_hists": [
+    {
+      "name" : "hGammaP",
+      "type": "TH2D",
+      "axes": "#pi0 Decay Gamma Momentum;Leading P [MeV];Sub-Leading P [MeV]",
+      "xbins": 50,
+      "ybins": 25,
+      "xu_lim": 1000.0,
+      "xl_lim": 0.0,
+      "yu_lim": 500.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hPiPPi0P",
+      "type": "TH2D",
+      "axes": "#pi+ vs #pi0  Momentum;#pi+ P [MeV];#pi0 P [MeV]",
+      "xbins": 60,
+      "ybins": 60,
+      "xu_lim": 1200.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1200.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hPiP1Pi0P",
+      "type": "TH2D",
+      "axes": "#pi+ vs 1#pi0  Momentum;#pi+ P [MeV];#pi0 P [MeV]",
+      "xbins": 60,
+      "ybins": 60,
+      "xu_lim": 1200.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1200.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hPi0EGammaOpenAngle",
+      "type": "TH2D",
+      "axes": "Gamma Open Angle vs #pi0 Energy;#theta [rad];#pi0 E [MeV]",
+      "xbins": 36,
+      "ybins": 60,
+      "xu_lim": 180.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1200.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hGammaR",
+      "type": "TH2D",
+      "axes": "Gamma Vertex Gap #DeltaR;#gamma1 [cm];#gamma2 [cm]",
+      "xbins": 50,
+      "ybins": 50,
+      "xu_lim": 1.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hGammaLen",
+      "type": "TH2D",
+      "axes": "Gamma Length;#gamma1 [cm];#gamma2 [cm]",
+      "xbins": 50,
+      "ybins": 50,
+      "xu_lim": 100.0,
+      "xl_lim": 0.0,
+      "yu_lim": 100.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hGammaPi0Angle",
+      "type": "TH2D",
+      "axes": "#pi0 Gamma Angle;#gamma1 Angle [deg];#gamma2 Angle [deg]",
+      "xbins": 72,
+      "ybins": 72,
+      "xu_lim": 180.0,
+      "xl_lim": 0.0,
+      "yu_lim": 180.0,
+      "yl_lim": 0.0
+    },
+    {
+      "name" : "hPi0TrueCalc",
+      "type": "TH2D",
+      "axes": "#pi0 Angle True vs Calc;Calc cos#theta;True cos#theta",
+      "xbins": 40,
+      "ybins": 40,
+      "xu_lim": 1.0,
+      "xl_lim": -1.0,
+      "yu_lim": 1.0,
+      "yl_lim": -1.0
+    },
+    {
+      "name" : "hPi0TrueCalcEnergy",
+      "type": "TH2D",
+      "axes": "#pi0 Energy True vs Calc;Calc Energy [MeV];True Energy [MeV]",
+      "xbins": 60,
+      "ybins": 60,
+      "xu_lim": 1200.0,
+      "xl_lim": 0.0,
+      "yu_lim": 1200.0,
+      "yl_lim": 0.0
+    }
+  ]
+}

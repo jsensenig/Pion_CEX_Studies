@@ -1,0 +1,25 @@
+{
+  "1d_hists": [
+    {
+      "name" : "hEndXDiffEl",
+      "type": "TH1D",
+      "axes": "Vertex #Delta X;True - Reco EndX [cm];Count",
+      "bins": 50,
+      "u_lim": 200,
+      "l_lim": -300
+    }
+  ],
+  "2d_hists": [
+    {
+      "name" : "Example 2D Histo",
+      "type": "TH2I",
+      "axes": "<Title>>;<X-axis>>;<Y-axis>>",
+      "xbins": 10,
+      "ybins": 10,
+      "xu_lim": 10,
+      "xl_lim": 0,
+      "yu_lim": 10,
+      "yl_lim": 0
+    }
+  ]
+}
