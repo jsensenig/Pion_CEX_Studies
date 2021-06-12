@@ -30,6 +30,8 @@ public:
 
   void ExtractXsecAngle( int nevts, TString& out_file, bool truth_xsec );
 
+  bool InitXsec( const std::string& geant_xsec, int erange );
+
 private:
 
   TGraph* SinglePlotXsecEnergy( std::vector<double> &xsec, double angle, std::vector<double> &energy, double beam_energy,

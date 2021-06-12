@@ -9,54 +9,7 @@
 
 
 CrossSection::CrossSection()
-{
-
-  // Define bin edges 2GeV/c
-//  std::vector<double> beam_bins = {1000, 1500.,1750., 2000.};
-//  std::vector<double> energy_bins = {0., 200., 400., 600., 800., 1000.};
-//  std::vector<double> angle_bins = {-1., -0.5, 0., 0.25, 0.5, 0.75, 1.};
-
-  // Define bin edges 1GeV/c
-  std::vector<double> beam_bins = {0, 250., 500., 750., 1000.};
-  std::vector<double> energy_bins = {0., 200., 400., 600., 800., 1000.};
-  std::vector<double> angle_bins = {-1., -0.5, 0.0, 0.25, 0.5, 0.75, 1.};
-
-  size_t bbins = beam_bins.size() - 1;
-  size_t ebins = energy_bins.size() - 1;
-  size_t abins = angle_bins.size() - 1;
-
-  // Each variable plot
-  beam_energy_hist = std::make_unique<TH1D>( "vars_beam_energy", "Beam Pi+ Kinetic Energy;T_{#pi^{+}} [MeV/c];Count", bbins, beam_bins.data() );
-  energy_hist = std::make_unique<TH1D>( "vars_pi0_energy", "Pi0 Kinetic Energy;T_{#pi^{0}} [MeV/c];Count", ebins, energy_bins.data() );
-  angle_hist = std::make_unique<TH1D>( "vars_pi0_angle", "Pi0 Angle;cos(#theta_{pi^{0}});Count", abins, angle_bins.data() );
-
-  // Differential cross section variables
-  std::string energy_angle_title("Pi0 Angle vs Kinetic Energy;T_{#pi^{0}} [MeV/c];cos(#theta_{#pi^{0}})");
-  energy_angle_hist = std::make_unique<TH2D>( "vars_pi0_energy_angle", energy_angle_title.c_str(),
-                                              ebins, energy_bins.data(), abins,angle_bins.data() );
-
-  // Total 3D histogram. Dimensions are: {beam pi+ interaction KE, pi0 KE, pi0 scattering angle}
-  std::string title_3d("#pi0 Angle vs #pi0 KE vs Beam #pi+ KE;T_{#pi^{0}} [MeV/c];cos(#theta_{#pi^{0}});T_{#pi^{+}} [MeV/c]");
-  beam_energy_angle_hist = std::make_unique<TH3D>( "vars_beam_ke_pi0_energy_angle", title_3d.c_str(),
-                                                   ebins, energy_bins.data(), abins, angle_bins.data(), bbins, beam_bins.data() );
-
-  // Truth total 3D histogram. Dimensions are: {beam pi+ interaction KE, pi0 KE, pi0 scattering angle}
-  std::string truth_title("Truth #pi0 Angle vs #pi0 KE vs Beam #pi+ KE;T_{#pi^{0}} [MeV/c];cos(#theta_{#pi^{0}});T_{#pi^{+}} [MeV/c]");
-  truth_beam_energy_angle_hist = std::make_unique<TH3D>( "vars_truth_beam_ke_pi0_energy_angle", title_3d.c_str(),
-                                                   ebins, energy_bins.data(), abins, angle_bins.data(), bbins, beam_bins.data() );
-
-  geant_xsec_file = std::make_unique<TFile>("/Users/jsen/tmp_fit/cross_section_cex_n100k_Tall.root");
-
-  for( int b = 1; b < beam_energy_hist->GetXaxis()->GetNbins() + 1; b++ ) {
-    int bin_center = static_cast<int>( beam_energy_hist->GetBinCenter(b) );
-    std::string geant_graph_name = "inel_cex_" + std::to_string(bin_center) + "_MeV";
-    std::cout << "Loading GEANT Xsec TGraph " << geant_graph_name << std::endl;
-    geant_xsec_map[bin_center] = (TH2D*)geant_xsec_file->Get( geant_graph_name.c_str() );
-  }
-
-  if( !geant_xsec_file->IsOpen() ) std::cout << "Can't find Xsec file!" << std::endl;
-
-}
+{ ; }
 
 CrossSection::~CrossSection()
 {
@@ -97,8 +50,8 @@ void CrossSection::ExtractXsecEnergy( int total_events, TString& out_file, bool 
 
   std::map<std::string, TGraph*> xsec_graphs;
 
-  double NA=6.02214076e23; //
-  double MAr=39.95;        //gmol
+  double NA = 6.02214076e23; //
+  double MAr = 39.95;        //gmol
   double Density = 1.39;   // g/cm^3
   double Thickness = 222.; // cm
 
@@ -210,8 +163,8 @@ void CrossSection::ExtractXsecAngle( int total_events, TString& out_file, bool t
 
   std::map<std::string, TGraph*> xsec_graphs;
 
-  double NA=6.02214076e23; //
-  double MAr=39.95;        //gmol
+  double NA = 6.02214076e23; //
+  double MAr = 39.95;        //gmol
   double Density = 1.39;   // g/cm^3
   double Thickness = 222.; // cm
 
@@ -251,6 +204,7 @@ void CrossSection::ExtractXsecAngle( int total_events, TString& out_file, bool t
 
         // True xsec
         true_xsec.emplace_back( GetDDXsec( energy_center, angle_center, beam_center ) );
+        true_xsec_xerr.emplace_back(0.);
         true_xsec_yerr.emplace_back(0.);
 
         angle.emplace_back( angle_center );
@@ -308,7 +262,74 @@ TGraph* CrossSection::SinglePlotXsecAngle( std::vector<double> &xsec, double ene
 // ............................................................................
 double CrossSection::GetDDXsec( double energy, double angle, double beam ) {
 
+  // 1) Select the correct 2D plot for the incident pion energy
+  // 2) find the global bin number corresponding to the values of energy, angle
   int global_bin = geant_xsec_map[beam] -> FindBin( energy, angle );
-  return geant_xsec_map[beam] -> GetBinContent( global_bin ) * 1.e3; //micro-barn
+  // 3) get the content in that bin. bin content = coss section [mb]
+  return geant_xsec_map[beam] -> GetBinContent( global_bin ) * 1.e3; // convert to micro-barn
+
+}
+
+// ............................................................................
+bool CrossSection::InitXsec( const std::string& geant_xsec, int erange ) {
+
+  std::vector<double> beam_bins;
+  std::vector<double> energy_bins;
+  std::vector<double> angle_bins;
+
+  if( erange == 1 ) {
+    // Define bin edges 1GeV/c beam
+    beam_bins = {0, 250., 500., 750., 1000.};
+    energy_bins = {0., 200., 400., 600., 800., 1000.};
+    angle_bins = {-1., -0.5, 0.0, 0.25, 0.5, 0.75, 1.};
+  } else if( erange == 2 ) {
+    // Define bin edges 2GeV/c beam
+    beam_bins = {1000, 1500., 1750., 2000.};
+    energy_bins = {0., 200., 400., 600., 800., 1000.};
+    angle_bins = {-1., -0.5, 0., 0.25, 0.5, 0.75, 1.};
+  } else {
+    std::cout << "Unknow beam Energy! " << erange << std::endl;
+    return false;
+  }
+
+  size_t bbins = beam_bins.size() - 1;
+  size_t ebins = energy_bins.size() - 1;
+  size_t abins = angle_bins.size() - 1;
+
+  // Each variable plot
+  beam_energy_hist = std::make_unique<TH1D>( "vars_beam_energy", "Beam Pi+ Kinetic Energy;T_{#pi^{+}} [MeV/c];Count", bbins, beam_bins.data() );
+  energy_hist = std::make_unique<TH1D>( "vars_pi0_energy", "Pi0 Kinetic Energy;T_{#pi^{0}} [MeV/c];Count", ebins, energy_bins.data() );
+  angle_hist = std::make_unique<TH1D>( "vars_pi0_angle", "Pi0 Angle;cos(#theta_{pi^{0}});Count", abins, angle_bins.data() );
+
+  // Differential cross section variables
+  std::string energy_angle_title("Pi0 Angle vs Kinetic Energy;T_{#pi^{0}} [MeV/c];cos(#theta_{#pi^{0}})");
+  energy_angle_hist = std::make_unique<TH2D>( "vars_pi0_energy_angle", energy_angle_title.c_str(),
+                                              ebins, energy_bins.data(), abins,angle_bins.data() );
+
+  // Total 3D histogram. Dimensions are: {beam pi+ interaction KE, pi0 KE, pi0 scattering angle}
+  std::string title_3d("#pi0 Angle vs #pi0 KE vs Beam #pi+ KE;T_{#pi^{0}} [MeV/c];cos(#theta_{#pi^{0}});T_{#pi^{+}} [MeV/c]");
+  beam_energy_angle_hist = std::make_unique<TH3D>( "vars_beam_ke_pi0_energy_angle", title_3d.c_str(),
+                                                   ebins, energy_bins.data(), abins, angle_bins.data(), bbins, beam_bins.data() );
+
+  // Truth total 3D histogram. Dimensions are: {beam pi+ interaction KE, pi0 KE, pi0 scattering angle}
+  std::string truth_title("Truth #pi0 Angle vs #pi0 KE vs Beam #pi+ KE;T_{#pi^{0}} [MeV/c];cos(#theta_{#pi^{0}});T_{#pi^{+}} [MeV/c]");
+  truth_beam_energy_angle_hist = std::make_unique<TH3D>( "vars_truth_beam_ke_pi0_energy_angle", title_3d.c_str(),
+                                                         ebins, energy_bins.data(), abins, angle_bins.data(), bbins, beam_bins.data() );
+
+  geant_xsec_file = std::make_unique<TFile>( geant_xsec.c_str() );
+
+  for( int b = 1; b < beam_energy_hist->GetXaxis()->GetNbins() + 1; b++ ) {
+    int bin_center = static_cast<int>( beam_energy_hist->GetBinCenter(b) );
+    std::string geant_graph_name = "inel_cex_" + std::to_string(bin_center) + "_MeV";
+    std::cout << "Loading GEANT Xsec TGraph " << geant_graph_name << std::endl;
+    geant_xsec_map[bin_center] = (TH2D*)geant_xsec_file->Get( geant_graph_name.c_str() );
+  }
+
+  if( !geant_xsec_file->IsOpen() ) {
+    std::cout << "Can't find Xsec file!" << std::endl;
+    return false;
+  }
+
+  return true;
 
 }

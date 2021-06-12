@@ -168,7 +168,8 @@ void run_pi0_mc_xsec( const std::string& in_file, const std::string& in_tree, Hi
       std::cout << "AllShower size big " << reco_daughter_allShower_energy->size() << std::endl;
     }
 
-    if( truth_xsec && true_cex ) cs.FillTrueXsecHisto( true_pi0.pip_energy, pi0_kinetic_energy( true_pi0 ), pi0_cos_angle( true_pi0 ) );
+    bool save_true_xsec = truth_xsec && true_cex;// && true_beam_endZ <= 222.;
+    if( save_true_xsec ) cs.FillTrueXsecHisto( true_pi0.pip_energy, pi0_kinetic_energy( true_pi0 ), pi0_cos_angle( true_pi0 ) );
     else if( !truth_xsec ) cs.FillRecoXsecHisto( pi0.pip_energy, pi0_kinetic_energy( pi0 ), pi0_cos_angle( pi0 ) );
 
     true_cex_count += true_cex;
@@ -388,8 +389,10 @@ int main(int argc, char * argv[]){
   // Configure histograms
   hists.ConfigureHistos( hists_config );
 
-  std::cout << "Starting pi0 xsec study! For " << erange_arg << "GeV Truth=" << truth_xsec_arg << std::endl;
+  // Initialize cross section
+  cs.InitXsec( "/Users/jsen/tmp_fit/cross_section_cex_n100k_Tall.root", erange_arg );
 
+  std::cout << "Starting pi0 xsec study! For " << erange_arg << "GeV Truth=" << truth_xsec_arg << std::endl;
   run_pi0_mc_xsec( input_file, input_tree, hists, truth_xsec_arg );
 
   std::cout << "Writing histograms to " << output_file << std::endl;
