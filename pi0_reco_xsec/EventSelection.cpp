@@ -368,7 +368,6 @@ bool EventSelection::DaughterNhitCut( size_t i ) {
 void EventSelection::CleanMemory() {
 
   // Clean up
-  delete true_beam_endProcess;
   delete true_beam_daughter_PDG;
   delete beam_inst_TOF;
   delete reco_daughter_PFP_michelScore_collection;

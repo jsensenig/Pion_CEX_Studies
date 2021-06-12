@@ -25,7 +25,9 @@ struct pi0_proxy {
   }
 };
 
-void run_pi0_mc_xsec( std::string in_file, Histograms &hists, bool truth_xsec );
+bool parseArgs(int argc, char ** argv);
+
+void run_pi0_mc_xsec( const std::string& in_file, const std::string& in_tree, Histograms &hists, bool truth_xsec );
 
 std::map<int, double> daughter_pi0_energy( Histograms& hists );
 
@@ -46,6 +48,11 @@ void plot_all_pi0( pi0_proxy& pi0, double pi0_energy, Histograms& hists, size_t 
 double open_angle( double px1, double py1, double pz1, double px2, double py2, double pz2 );
 
 void clean_pointers();
+
+/// Input args
+int erange_arg;
+bool truth_xsec_arg;
+std::string output_file_override;
 
 int true_cex_count;
 int true_inc_piplus_count;

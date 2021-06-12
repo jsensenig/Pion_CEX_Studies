@@ -11,7 +11,7 @@
 #include <iostream>
 
 
-void run_pi0_mc_xsec( std::string in_file, Histograms &hists, bool truth_xsec ) {
+void run_pi0_mc_xsec( const std::string& in_file, const std::string& in_tree, Histograms &hists, bool truth_xsec ) {
 
   TFile *proc_file = TFile::Open( in_file.c_str() );
 
@@ -20,8 +20,7 @@ void run_pi0_mc_xsec( std::string in_file, Histograms &hists, bool truth_xsec ) 
     return;
   }
 
-  TTree* tree = (TTree*)proc_file -> Get("pionana/beamana");  // 1GeV
-  //TTree* tree = (TTree*)proc_file -> Get("pduneana/beamana;2"); // 2GeV
+  TTree* tree = (TTree*)proc_file -> Get( in_tree.c_str() );
 
   /// Truth
   tree->SetBranchAddress("true_daughter_nPi0", &true_daughter_nPi0);
@@ -87,11 +86,12 @@ void run_pi0_mc_xsec( std::string in_file, Histograms &hists, bool truth_xsec ) 
     pi0.reset();
 
     // Define true CEX
-    bool true_cex = true_beam_PDG == utils::pdg::kPdgPiP &&
+    bool true_cex = true_beam_PDG == utils::pdg::kPdgPiP && *true_beam_endProcess == "pi+Inelastic" &&
                    true_daughter_nPi0 == 1 && true_daughter_nPiMinus == 0 &&
                    true_daughter_nPiPlus == 0 && ( true_daughter_nProton > 0 || true_daughter_nNeutron > 0 );
 
-    true_inc_piplus_count += true_beam_PDG == utils::pdg::kPdgPiP;
+    // We only want the beam pions contributing to the in-elastic processes
+    true_inc_piplus_count += true_beam_PDG == utils::pdg::kPdgPiP && *true_beam_endProcess == "pi+Inelastic";
 
     std::map<int, double> pi0_energy_map = daughter_pi0_energy( hists );
     for( size_t i = 0; i < true_beam_Pi0_decay_parID->size()/2; i++ ) {
@@ -193,6 +193,7 @@ double pip_interaction_ke() {
 
   double pip_mass = utils::pdg::pdg2mass( utils::pdg::kPdgPiP );
 
+  // Get beam particle energy loss by integrating dE/dx
   double pip_eloss = 0;
   for( auto& eloss : *reco_beam_calibrated_dEdX_SCE ) {
     if ( eloss > 1000. ) continue;
@@ -361,20 +362,35 @@ void clean_pointers() {
 
 }
 
-int main() {
+int main(int argc, char * argv[]){
+
+  std::cout << "starting" << std::endl;
+
+  if( !parseArgs( argc, argv ) )
+    return 0;
+
+  std::string input_file;
+  std::string input_tree;
 
   /// 1 GeV 228k events
-  std::string input_file = "../../../pionana_Prod4_mc_1GeV_1_14_21.root";
-  /// 2GeV 2.6k events
-  //std::string input_file = "../../../pduneana_2gev_n2590.root";
+  if( erange_arg == 1 ) {
+    input_file = "../../../pionana_Prod4_mc_1GeV_1_14_21.root";
+    input_tree = "pionana/beamana";
+  } else if( erange_arg == 2 ) {
+    /// 2GeV 2.6k events
+    input_file = "../../../pduneana_2gev_n2590.root";
+    input_tree = "pduneana/beamana;2";
+  }
+
   TString output_file = "out.root";
   std::string hists_config = "../hists.json";
 
   // Configure histograms
   hists.ConfigureHistos( hists_config );
 
-  std::cout << "Starting pi0 xsec study!" << std::endl;
-  run_pi0_mc_xsec( input_file, hists, true );
+  std::cout << "Starting pi0 xsec study! For " << erange_arg << "GeV Truth=" << truth_xsec_arg << std::endl;
+
+  run_pi0_mc_xsec( input_file, input_tree, hists, truth_xsec_arg );
 
   std::cout << "Writing histograms to " << output_file << std::endl;
   // Write histograms ot file
@@ -383,3 +399,36 @@ int main() {
   return 0;
 
 }
+
+bool parseArgs(int argc, char ** argv) {
+
+  bool found_erange = false, found_sim_select = false;
+
+  for( int i = 1; i < argc; ++i ) {
+
+    if( ( strcmp( argv[i], "--help" )  == 0 ) || ( strcmp( argv[i], "-h" ) == 0 ) ){
+           std::cout << "Usage: ./pi0_reco_xsec -e E_pi+ -s MC=1/Reco=0 [options]" << std::endl;
+           std::cout << std::endl;
+           std::cout << "Options: " << std::endl;
+           std::cout << "\t-o <output_file_override>.root" << std::endl;
+
+           return false;
+    }
+    else if( strcmp( argv[i], "-e" ) == 0 ) {
+      erange_arg = atoi( argv[i+1] );
+      found_erange = true;
+    }
+    else if( strcmp( argv[i], "-s" ) == 0 ) {
+      truth_xsec_arg = atoi( argv[i + 1] );
+      found_sim_select = true;
+    }
+    else if( strcmp( argv[i], "-o" ) == 0 ){
+       output_file_override = argv[i+1];
+    }
+
+  }
+
+  if(!( found_erange && found_sim_select )) std::cout << "Missing -e or -s arguement!" << std::endl;
+  return found_erange && found_sim_select;
+}
+

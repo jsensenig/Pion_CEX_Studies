@@ -26,9 +26,9 @@ public:
 
   void ExtractXsec( int total_events, TString& out_file );
 
-  void ExtractXsecEnergy( int nevts, TString& out_file, bool true_xsec );
+  void ExtractXsecEnergy( int nevts, TString& out_file, bool truth_xsec );
 
-  void ExtractXsecAngle( int nevts, TString& out_file, bool true_xsec );
+  void ExtractXsecAngle( int nevts, TString& out_file, bool truth_xsec );
 
 private:
 
@@ -54,7 +54,7 @@ private:
 
   /// Get the GEANT xsec
   std::unique_ptr<TFile> geant_xsec_file;
-  TH2D* geant_dd_xsec;
+  std::map<double, TH2D*> geant_xsec_map;
 
 };
 

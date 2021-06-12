@@ -17,43 +17,44 @@ CrossSection::CrossSection()
 //  std::vector<double> angle_bins = {-1., -0.5, 0., 0.25, 0.5, 0.75, 1.};
 
   // Define bin edges 1GeV/c
-  std::vector<double> beam_bins = {0, 250., 500.,750., 1000.};
-  std::vector<double> energy_bins = {0., 100., 200., 300., 400., 500., 600., 700., 800., 900., 1000.};
-  std::vector<double> angle_bins = {-1., -0.8, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.};
+  std::vector<double> beam_bins = {0, 250., 500., 750., 1000.};
+  std::vector<double> energy_bins = {0., 200., 400., 600., 800., 1000.};
+  std::vector<double> angle_bins = {-1., -0.5, 0.0, 0.25, 0.5, 0.75, 1.};
 
   size_t bbins = beam_bins.size() - 1;
   size_t ebins = energy_bins.size() - 1;
   size_t abins = angle_bins.size() - 1;
 
   // Each variable plot
-  beam_energy_hist = std::make_unique<TH1D>( "beam_energy", "Beam Pi+ Kinetic Energy;T_{#pi^{+}} [MeV/c];Count", bbins, beam_bins.data() );
-  energy_hist = std::make_unique<TH1D>( "pi0_energy", "Pi0 Kinetic Energy;T_{#pi^{0}} [MeV/c];Count", ebins, energy_bins.data() );
-  angle_hist = std::make_unique<TH1D>( "pi0_angle", "Pi0 Angle;cos(#theta_{pi^{0}});Count", abins, angle_bins.data() );
+  beam_energy_hist = std::make_unique<TH1D>( "vars_beam_energy", "Beam Pi+ Kinetic Energy;T_{#pi^{+}} [MeV/c];Count", bbins, beam_bins.data() );
+  energy_hist = std::make_unique<TH1D>( "vars_pi0_energy", "Pi0 Kinetic Energy;T_{#pi^{0}} [MeV/c];Count", ebins, energy_bins.data() );
+  angle_hist = std::make_unique<TH1D>( "vars_pi0_angle", "Pi0 Angle;cos(#theta_{pi^{0}});Count", abins, angle_bins.data() );
 
   // Differential cross section variables
   std::string energy_angle_title("Pi0 Angle vs Kinetic Energy;T_{#pi^{0}} [MeV/c];cos(#theta_{#pi^{0}})");
-  energy_angle_hist = std::make_unique<TH2D>( "pi0_energy_angle", energy_angle_title.c_str(),
+  energy_angle_hist = std::make_unique<TH2D>( "vars_pi0_energy_angle", energy_angle_title.c_str(),
                                               ebins, energy_bins.data(), abins,angle_bins.data() );
 
   // Total 3D histogram. Dimensions are: {beam pi+ interaction KE, pi0 KE, pi0 scattering angle}
   std::string title_3d("#pi0 Angle vs #pi0 KE vs Beam #pi+ KE;T_{#pi^{0}} [MeV/c];cos(#theta_{#pi^{0}});T_{#pi^{+}} [MeV/c]");
-  beam_energy_angle_hist = std::make_unique<TH3D>( "beam_ke_pi0_energy_angle", title_3d.c_str(),
+  beam_energy_angle_hist = std::make_unique<TH3D>( "vars_beam_ke_pi0_energy_angle", title_3d.c_str(),
                                                    ebins, energy_bins.data(), abins, angle_bins.data(), bbins, beam_bins.data() );
 
   // Truth total 3D histogram. Dimensions are: {beam pi+ interaction KE, pi0 KE, pi0 scattering angle}
   std::string truth_title("Truth #pi0 Angle vs #pi0 KE vs Beam #pi+ KE;T_{#pi^{0}} [MeV/c];cos(#theta_{#pi^{0}});T_{#pi^{+}} [MeV/c]");
-  truth_beam_energy_angle_hist = std::make_unique<TH3D>( "truth_beam_ke_pi0_energy_angle", title_3d.c_str(),
+  truth_beam_energy_angle_hist = std::make_unique<TH3D>( "vars_truth_beam_ke_pi0_energy_angle", title_3d.c_str(),
                                                    ebins, energy_bins.data(), abins, angle_bins.data(), bbins, beam_bins.data() );
 
+  geant_xsec_file = std::make_unique<TFile>("/Users/jsen/tmp_fit/cross_section_cex_n100k_Tall.root");
 
-  geant_xsec_file = std::make_unique<TFile>("/Users/jsen/tmp_fit/cross_section_cex_n50k_T870_newcosonly.root");
+  for( int b = 1; b < beam_energy_hist->GetXaxis()->GetNbins() + 1; b++ ) {
+    int bin_center = static_cast<int>( beam_energy_hist->GetBinCenter(b) );
+    std::string geant_graph_name = "inel_cex_" + std::to_string(bin_center) + "_MeV";
+    std::cout << "Loading GEANT Xsec TGraph " << geant_graph_name << std::endl;
+    geant_xsec_map[bin_center] = (TH2D*)geant_xsec_file->Get( geant_graph_name.c_str() );
+  }
+
   if( !geant_xsec_file->IsOpen() ) std::cout << "Can't find Xsec file!" << std::endl;
-
-  // Get the double differential cross section file
-  geant_dd_xsec = (TH2D*)geant_xsec_file->Get("inel_cex_870_MeV");
-
-  std::cout << "Rebinned Geant Xsec histogram! xbins = " << geant_dd_xsec->GetXaxis()->GetNbins() << " ybins = "
-            << geant_dd_xsec->GetYaxis()->GetNbins() << std::endl;
 
 }
 
@@ -80,13 +81,13 @@ void CrossSection::FillTrueXsecHisto( double pip_ke, double energy, double angle
 }
 
 // ............................................................................
-void CrossSection::ExtractXsecEnergy( int total_events, TString& out_file, bool true_xsec ) {
+void CrossSection::ExtractXsecEnergy( int total_events, TString& out_file, bool truth_xsec ) {
 
   std::cout << "Calculating cross section" << std::endl;
 
   // Select histogram
   TH3D* xsec_hist;
-  if( true_xsec ) xsec_hist = (TH3D*)truth_beam_energy_angle_hist->Clone();
+  if( truth_xsec ) xsec_hist = (TH3D*)truth_beam_energy_angle_hist->Clone();
   else xsec_hist = (TH3D*)beam_energy_angle_hist->Clone();
 
   // X = pi0 KE
@@ -96,8 +97,13 @@ void CrossSection::ExtractXsecEnergy( int total_events, TString& out_file, bool 
 
   std::map<std::string, TGraph*> xsec_graphs;
 
+  double NA=6.02214076e23; //
+  double MAr=39.95;        //gmol
+  double Density = 1.39;   // g/cm^3
+  double Thickness = 222.; // cm
+
   // N_tgt = 39.9624 / (6.022e23) * (1.3973) = 4.7492e-23 = Ar atomic mass / (Avagadro's number * LAr density)
-  double n_tgt = 39.9624 / ( 6.022e23 * 1.3973 );
+  double n_tgt = MAr / ( NA * Density * Thickness );
 
   // Get the number of bins in energy and angle
   int energy_bins = xsec_hist -> GetNbinsX();
@@ -116,7 +122,7 @@ void CrossSection::ExtractXsecEnergy( int total_events, TString& out_file, bool 
 
       // Project out the energy so we can get the error bars
       TH1D * h_xerr = xsec_hist -> ProjectionX( "h_xerr", abins, abins, bbins, bbins, "e" );
-      std::vector<double> xsec, true_xsec, xsec_yerr, true_xsec_yerr, energy, xsec_xerr;
+      std::vector<double> xsec, true_xsec, true_xsec_xerr, xsec_yerr, true_xsec_yerr, energy, xsec_xerr;
 
       for ( size_t ebins = 1; ebins < energy_bins + 1; ebins++ ) { // energy xsec
         // Get the energy bin center and width
@@ -125,12 +131,13 @@ void CrossSection::ExtractXsecEnergy( int total_events, TString& out_file, bool 
         double Ni = xsec_hist->GetBinContent( ebins, abins, bbins );
 
         // xsec calculation
-        double xsec_calc = (( Ni * n_tgt ) / ( total_events * ebin_width * abin_width * bbin_width )) * 1.e27;
-        xsec.emplace_back( xsec_calc ); // [milli-barn (mb)]
+        double xsec_calc = (( Ni * n_tgt ) / ( total_events * ebin_width * abin_width )) * 1.e30;
+        xsec.emplace_back( xsec_calc ); // [milli-barn (ub)]
         xsec_yerr.emplace_back(( xsec_calc / Ni ) * h_xerr->GetBinError( ebins ));
 
         // True xsec
         true_xsec.emplace_back( GetDDXsec( energy_center, angle_center, beam_center ) );
+        true_xsec_xerr.emplace_back(0.);
         true_xsec_yerr.emplace_back(0.);
 
         energy.emplace_back( energy_center );
@@ -147,7 +154,7 @@ void CrossSection::ExtractXsecEnergy( int total_events, TString& out_file, bool 
 
       std::stringstream true_gr_name;
       true_gr_name << "true_beam_" << (int)beam_center << "_angle_" << (int)( TMath::ACos( angle_center ) * TMath::RadToDeg() );
-      xsec_graphs[true_gr_name.str()] = SinglePlotXsecEnergy( true_xsec, angle_center, energy, beam_center, xsec_xerr, true_xsec_yerr, true );
+      xsec_graphs[true_gr_name.str()] = SinglePlotXsecEnergy( true_xsec, angle_center, energy, beam_center, true_xsec_xerr, true_xsec_yerr, true );
     } //angle
   }
 
@@ -176,24 +183,24 @@ TGraph* CrossSection::SinglePlotXsecEnergy( std::vector<double> &xsec, double an
   else xsec_graph->SetLineColor( 46 );
 
   std::stringstream title;
-  title << "1 GeV/c #pi^{+} CEX Cross-section (Angle = " << (int)( TMath::ACos( angle ) * TMath::RadToDeg() ) << "#circ)"
-        << " (T_{#pi^{+}} = " << (int)beam_energy << ")";
+  title << "#pi^{+} CEX Cross-section (Angle = " << (int)( TMath::ACos( angle ) * TMath::RadToDeg() ) << "#circ)"
+        << " (T_{#pi^{+}} = " << (int)beam_energy << " [MeV/c])";
   xsec_graph->SetTitle( title.str().c_str() );
   xsec_graph->GetXaxis()->SetTitle( "T_{#pi^{0}} [MeV/c]" );
-  xsec_graph->GetYaxis()->SetTitle( "#frac{d^{2}#sigma}{dT_{#pi^{0}}d#Omega_{#pi^{0}}} [mb/MeV/c#upointsr]" );
+  xsec_graph->GetYaxis()->SetTitle( "#frac{d^{2}#sigma}{dT_{#pi^{0}}d#Omega_{#pi^{0}}} [#mub/MeV/sr]" );
 
   return xsec_graph;
 
 }
 
 // ............................................................................
-void CrossSection::ExtractXsecAngle( int total_events, TString& out_file, bool true_xsec ) {
+void CrossSection::ExtractXsecAngle( int total_events, TString& out_file, bool truth_xsec ) {
 
   std::cout << "Calculating cross section" << std::endl;
 
   // Select histogram
   TH3D* xsec_hist;
-  if( true_xsec ) xsec_hist = (TH3D*)truth_beam_energy_angle_hist->Clone();
+  if( truth_xsec ) xsec_hist = (TH3D*)truth_beam_energy_angle_hist->Clone();
   else xsec_hist = (TH3D*)beam_energy_angle_hist->Clone();
 
   // X = pi0 KE
@@ -203,8 +210,13 @@ void CrossSection::ExtractXsecAngle( int total_events, TString& out_file, bool t
 
   std::map<std::string, TGraph*> xsec_graphs;
 
+  double NA=6.02214076e23; //
+  double MAr=39.95;        //gmol
+  double Density = 1.39;   // g/cm^3
+  double Thickness = 222.; // cm
+
   // N_tgt = 39.9624 / (6.022e23) * (1.3973) = 4.7492e-23 = Ar atomic mass / (Avagadro's number * LAr density)
-  double n_tgt = 39.9624 / ( 6.022e23 * 1.3973 );
+  double n_tgt = MAr / ( NA * Density * Thickness );
 
   // Get the number of bins in energy and angle
   int energy_bins = xsec_hist -> GetNbinsX();
@@ -224,7 +236,7 @@ void CrossSection::ExtractXsecAngle( int total_events, TString& out_file, bool t
       // Project out the angle so we can get the error bars
       TH1D * h_xerr = xsec_hist->ProjectionY( "h_xerr", ebins, ebins, bbins, bbins, "e" );
 
-      std::vector<double> xsec, true_xsec, xsec_yerr, true_xsec_yerr, angle, xsec_xerr;
+      std::vector<double> xsec, true_xsec_xerr, true_xsec, xsec_yerr, true_xsec_yerr, angle, xsec_xerr;
 
       for ( size_t abins = 1; abins < angle_bins + 1; abins++ ) { // angular xsec
         // Get the angle bin center and width
@@ -233,7 +245,7 @@ void CrossSection::ExtractXsecAngle( int total_events, TString& out_file, bool t
         double Ni = xsec_hist->GetBinContent( ebins, abins, bbins );
 
         // xsec calculation
-        double xsec_calc = (( Ni * n_tgt ) / ( total_events * ebin_width * abin_width * bbin_width )) * 1.e27; // [mb]
+        double xsec_calc = (( Ni * n_tgt ) / ( total_events * ebin_width * abin_width )) * 1.e30; // [ub]
         xsec.emplace_back( xsec_calc );
         xsec_yerr.emplace_back(( xsec_calc / Ni ) * h_xerr->GetBinError( abins ));
 
@@ -252,8 +264,9 @@ void CrossSection::ExtractXsecAngle( int total_events, TString& out_file, bool t
       xsec_graphs[gr_name.str()] = SinglePlotXsecAngle( xsec, energy_center, angle, beam_center, xsec_xerr, xsec_yerr, false );
 
       std::stringstream true_gr_name;
-      true_gr_name << "true_beam_" << (int)beam_center << "_angle_" << (int)energy_center;
-      xsec_graphs[true_gr_name.str()] = SinglePlotXsecAngle( true_xsec, energy_center, angle, beam_center, xsec_xerr, true_xsec_yerr, true );
+      true_gr_name << "true_beam_" << (int)beam_center << "_energy_" << (int)energy_center;
+      xsec_graphs[true_gr_name.str()] = SinglePlotXsecAngle( true_xsec, energy_center, angle, beam_center, true_xsec_xerr,
+                                                             true_xsec_yerr, true );
       }
     }
 
@@ -283,10 +296,10 @@ TGraph* CrossSection::SinglePlotXsecAngle( std::vector<double> &xsec, double ene
 
   std::stringstream title;
   title << "#pi^{+} CEX Cross-section (T_{#pi^{0}} = " << (int)energy << " [MeV/c])"
-        << " (T_{#pi^{+}} = " << beam_energy << ")";
+        << " (T_{#pi^{+}} = " << beam_energy << " [MeV/c])";
   xsec_graph->SetTitle( title.str().c_str() );
   xsec_graph->GetXaxis()->SetTitle( "cos#theta_{#pi^{0}}" );
-  xsec_graph->GetYaxis()->SetTitle( "#frac{d^{2}#sigma}{dT_{#pi^{0}}d#Omega_{#pi^{0}}} [mb/MeV/c#upointsr]" );
+  xsec_graph->GetYaxis()->SetTitle( "#frac{d^{2}#sigma}{dT_{#pi^{0}}d#Omega_{#pi^{0}}} [#mub/MeV/sr]" );
 
   return xsec_graph;
 
@@ -295,7 +308,7 @@ TGraph* CrossSection::SinglePlotXsecAngle( std::vector<double> &xsec, double ene
 // ............................................................................
 double CrossSection::GetDDXsec( double energy, double angle, double beam ) {
 
-  int global_bin = geant_dd_xsec -> FindBin( energy, angle );
-  return geant_dd_xsec -> GetBinContent( global_bin );
+  int global_bin = geant_xsec_map[beam] -> FindBin( energy, angle );
+  return geant_xsec_map[beam] -> GetBinContent( global_bin ) * 1.e3; //micro-barn
 
 }

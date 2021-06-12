@@ -58,7 +58,6 @@ private:
   // True beam
   int true_daughter_nPi0;
   int reco_beam_true_byHits_PDG;
-  std::string *true_beam_endProcess = new std::string;
 
   // Reco beam
   bool reco_beam_passes_beam_cuts;
